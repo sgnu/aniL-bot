@@ -20,12 +20,12 @@ const rest = new REST({ version: '9' }).setToken(config.token);
         console.log('Started refreshing application (/) commands');
 
         await rest.put(
-            Routes.applicationCommands(config.clientId),
+            Routes.applicationGuildCommands(config.clientId, config.guildId),
             { body: commands }
-        )
+        );
 
         console.log('Successfully reloaded application (/) commands');
     } catch (error) {
         console.error(error);
     }
-});
+})();
