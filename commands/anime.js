@@ -54,7 +54,6 @@ module.exports = {
             .then(response => response.json());
 
         const anime = response.data.Media;
-        console.log(anime);
         const embed = createEmbed(anime);
 
         await interaction.editReply({ ephemeral: false, embeds: [embed] });
