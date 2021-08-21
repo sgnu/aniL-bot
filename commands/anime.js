@@ -54,6 +54,7 @@ module.exports = {
             .then(response => response.json());
 
         const anime = response.data.Media;
+        console.log(anime);
         const embed = createEmbed(anime);
 
         await interaction.editReply({ ephemeral: false, embeds: [embed] });
@@ -83,7 +84,7 @@ function createEmbed(anime) {
         .addFields(
             { name: 'Score', value: anime.averageScore !== null ? (anime.averageScore / 10) + ' ⭐' : 'N/A', inline: true },
             { name: 'Status', value: status, inline: true},
-            { name: 'Year', value: anime.startDate.year !== null ? anime.startDate.year : 'TBA', inline: true },
+            { name: 'Year', value: anime.startDate.year !== null ? '' + anime.startDate.year : 'TBA', inline: true },
             { name: 'Genres', value: '' + genres.join(', '), inline: true}
         )
 }
