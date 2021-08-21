@@ -12,13 +12,16 @@ const query = `
             native
         }
         description(asHtml: false)
-        seasonYear
+        startDate {
+            year
+        }
         coverImage {
             large
             color
         }
         averageScore
         genres
+        status(version: 2)
         }
     }
 `
@@ -47,8 +50,6 @@ module.exports = {
             })
         }
 
-        let index = 0;
-
         const response = await fetch(url, options)
             .then(response => response.json());
 
@@ -60,16 +61,29 @@ module.exports = {
 }
 
 function createEmbed(anime) {
-    const genres = anime.genres.length > 5 ? anime.genres.splice(5) : anime.genres
+    const genres = anime.genres.length > 5 ? anime.genres.splice(5) : anime.genres;
+    const status = (anime.status.charAt(0) + anime.status.substring(1).toLowerCase()).replaceAll('_', ' ');
+    let title;
+    if (anime.title.english === null) {
+        if (anime.title.romaji === null) {
+            title = anime.title.native;
+        } else {
+            title = anime.title.romaji;
+        }
+    } else {
+        title = anime.title.english;
+    }
+
     return new MessageEmbed()
         .setColor(anime.coverImage.color)
-        .setTitle(anime.title.english)
+        .setTitle(title)
         .setURL('https://anilist.co/anime/' + anime.id)
         .setThumbnail(anime.coverImage.large)
         .setDescription(anime.description.replaceAll(/(<\S*>)/g, ''))
         .addFields(
-            { name: 'Score', value: '' + (anime.averageScore / 10) + ' ⭐', inline: true },
-            { name: 'Year', value: '' + anime.seasonYear, inline: true },
+            { name: 'Score', value: anime.averageScore !== null ? (anime.averageScore / 10) + ' ⭐' : 'N/A', inline: true },
+            { name: 'Status', value: status, inline: true},
+            { name: 'Year', value: anime.startDate.year !== null ? anime.startDate.year : 'TBA', inline: true },
             { name: 'Genres', value: '' + genres.join(', '), inline: true}
         )
 }
