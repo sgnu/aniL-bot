@@ -36,6 +36,8 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction) {
+        await interaction.deferReply();
+
         const search = interaction.options.getString('search');
         const url = 'https://graphql.anilist.co';
         const options = {
@@ -56,7 +58,7 @@ module.exports = {
         const anime = response.data.Media;
         const embed = createEmbed(anime);
 
-        await interaction.editReply({ ephemeral: false, embeds: [embed] });
+        return await interaction.editReply({ ephemeral: false, embeds: [embed] });
     }
 }
 

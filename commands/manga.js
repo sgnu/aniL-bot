@@ -37,6 +37,8 @@ module.exports = {
             .setRequired(true)
             ),
     async execute(interaction) {
+        await interaction.deferReply();
+
         const search = interaction.options.getString('search');
         const url = 'https://graphql.anilist.co'
         const options = {

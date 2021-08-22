@@ -23,8 +23,6 @@ client.on('interactionCreate', async interaction => {
 
     if (!command) return;
 
-    await interaction.deferReply();
-
     try {
         await command.execute(interaction);
     } catch (error) {
